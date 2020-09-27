@@ -1,19 +1,14 @@
 <template>
   <div>
     <form @submit.prevent="onSubmit">
-      <!-- TITLE -->
-      <div class="form-item">
-        <label for="title">Title:</label>
-        <input
-          type="text"
-          placeholder="title"
-          name="title"
-          v-model="title"
-          @blur="onValidate('title')"
-          autocomplete="off"
-        />
-        <p v-if="!!errors['title']" class="error-message">not valid</p>
-      </div>
+      <Input
+        label="Title"
+        placeholder="Write the title..."
+        name="title-input"
+        v-model="title"
+        v-on:on-validate="onValidate"
+        v-bind:errors="errors['title']"
+      />
 
       <!-- TAGS -->
       <div class="form-item">
@@ -55,17 +50,7 @@
         <p class="meta-info">{{ description.length }}/2048</p>
       </div>
 
-      <!-- DATE -->
-      <div class="form-item">
-        <label for="date">Date:</label>
-        <input
-          type="date"
-          placeholder="date"
-          name="date"
-          v-model="date"
-          autocomplete="off"
-        />
-      </div>
+      <InputDate label="Date" name="date-input" v-model="date" />
 
       <button type="submit" :disabled="!formIsValid">Save</button>
     </form>
@@ -73,8 +58,15 @@
 </template>
 
 <script>
+import Input from '@/components/Input.vue';
+import InputDate from '@/components/InputDate.vue';
+
 export default {
   name: 'NewTask',
+  components: {
+    Input,
+    InputDate,
+  },
   data() {
     return {
       title: '',
@@ -90,7 +82,7 @@ export default {
       if (this.formIsValid) {
         console.log('data', {
           title: this.title,
-          tags: this.tags,
+          tags: this.tagsArr,
           description: this.description,
           date: this.date,
         });
@@ -127,14 +119,14 @@ export default {
         !!this.title &&
         !!this.description &&
         this.description.length <= 2048 &&
-        !!this.tags
+        !!this.tagsArr.length
       );
     },
   },
 };
 </script>
 
-<style scoped>
+<style>
 form {
   width: 500px;
   margin: auto;
