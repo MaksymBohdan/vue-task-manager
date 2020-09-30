@@ -5,50 +5,31 @@
         label="Title"
         placeholder="Write the title..."
         name="title-input"
+        v-bind:errors="errors['title']"
         v-model="title"
         v-on:on-validate="onValidate"
-        v-bind:errors="errors['title']"
       />
 
-      <!-- TAGS -->
-      <div class="form-item">
-        <label for="tags">Tags:</label>
-        <input
-          type="text"
-          placeholder="tags"
-          name="tags"
-          v-model="tags"
-          @blur="onValidate('tagsArr')"
-          @keyup="onTagSave"
-          autocomplete="off"
-        />
+      <InputTags
+        label="Tags"
+        placeholder="Choose the tags"
+        name="tags-input"
+        v-model="tags"
+        v-on:on-validate="onValidate"
+        v-on:on-tag-save="onTagSave"
+        v-bind:tagsArr="tagsArr"
+        v-bind:errors="errors['tagsArr']"
+      />
 
-        <p class="no-tags" v-if="!tagsArr.length">No tags</p>
-
-        <ul v-else-if="tagsArr.length">
-          <li v-for="tag in tagsArr" :key="tag">
-            {{ tag }}
-          </li>
-        </ul>
-
-        <p v-if="errors['tagsArr']" class="error-message">not valid</p>
-      </div>
-
-      <!-- DESCRIPTION -->
-      <div class="form-item">
-        <label for="description">Description:</label>
-        <input
-          type="text"
-          placeholder="description"
-          v-model="description"
-          name="description"
-          @blur="onValidate('description')"
-          maxlength="2048"
-          autocomplete="off"
-        />
-        <p v-if="errors['description']" class="error-message">not valid</p>
-        <p class="meta-info">{{ description.length }}/2048</p>
-      </div>
+      <InputContent
+        label="Description"
+        placeholder="Describe you task"
+        name="content-input"
+        v-model="description"
+        v-on:on-validate="onValidate"
+        v-bind:errors="errors['description']"
+        v-bind:description="description"
+      />
 
       <InputDate label="Date" name="date-input" v-model="date" />
 
@@ -58,14 +39,20 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
+
 import Input from '@/components/Input.vue';
 import InputDate from '@/components/InputDate.vue';
+import InputTags from '@/components/InputTags.vue';
+import InputContent from '@/components/InputContent.vue';
 
 export default {
   name: 'NewTask',
   components: {
     Input,
     InputDate,
+    InputTags,
+    InputContent,
   },
   data() {
     return {
@@ -78,14 +65,19 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(['createTask']),
     onSubmit() {
       if (this.formIsValid) {
-        console.log('data', {
+        const newTask = {
           title: this.title,
           tags: this.tagsArr,
           description: this.description,
           date: this.date,
-        });
+          status: false,
+        };
+
+        this.createTask(newTask);
+        this.resetForm();
       }
     },
     onValidate(formItem) {
@@ -100,6 +92,14 @@ export default {
         this.tagsArr.push(this.tags);
         this.tags = '';
       }
+    },
+    resetForm() {
+      this.title = '';
+      this.tags = '';
+      this.tagsArr = [];
+      this.description = '';
+      this.date = '';
+      this.errors = { title: false, tagsArr: false, description: false };
     },
   },
   watch: {
@@ -163,23 +163,5 @@ input {
   text-align: right;
   margin: 0 80px;
   padding: 0;
-}
-
-ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  width: 424px;
-  box-sizing: border-box;
-  margin-top: 5px;
-}
-
-li {
-  color: white;
-  background-color: saddlebrown;
-  padding: 5px;
-  margin: 0px 5px 5px 0;
 }
 </style>
