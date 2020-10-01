@@ -3,7 +3,7 @@
     <div>TaskList</div>
 
     <ul class="task-list">
-      <li class="task-item" :key="task.title" v-for="task of allTasks">
+      <li class="task-item" :key="task.id" v-for="task of allTasks">
         <h1>{{ task.title }}</h1>
         <p>{{ task.description }}</p>
       </li>
@@ -14,12 +14,8 @@
 <script>
 import { mapGetters } from 'vuex';
 
-// @ is an alias to /src
-// import HelloWorld from '@/components/HelloWorld.vue';
-
 export default {
   name: 'TaskList',
-
   components: {},
   computed: mapGetters(['allTasks']),
 };

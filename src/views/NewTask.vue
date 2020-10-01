@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form @submit.prevent="onSubmit">
+    <form @submit.prevent="onSubmit" @keypress="preventSubmitOnKey">
       <Input
         label="Title"
         placeholder="Write the title..."
@@ -66,14 +66,23 @@ export default {
   },
   methods: {
     ...mapMutations(['createTask']),
+
+    preventSubmitOnKey(e) {
+      if (e.keyCode === 13) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
+    },
     onSubmit() {
       if (this.formIsValid) {
         const newTask = {
+          id: Date.now(),
           title: this.title,
           tags: this.tagsArr,
           description: this.description,
           date: this.date,
-          status: false,
+          status: true,
         };
 
         this.createTask(newTask);
@@ -89,7 +98,10 @@ export default {
     },
     onTagSave(e) {
       if (e.code === 'Enter' && !!this.tags) {
-        this.tagsArr.push(this.tags);
+        this.tagsArr.push({
+          content: this.tags,
+          id: Date.now() + this.tags,
+        });
         this.tags = '';
       }
     },
@@ -104,13 +116,13 @@ export default {
   },
   watch: {
     title() {
-      this.onValidate('title');
+      if (this.title) this.onValidate('title');
     },
     tagsArr() {
-      this.onValidate('tagsArr');
+      if (this.tagsArr.length) this.onValidate('tagsArr');
     },
     description() {
-      this.onValidate('description');
+      if (this.description) this.onValidate('description');
     },
   },
   computed: {

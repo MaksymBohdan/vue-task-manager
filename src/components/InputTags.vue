@@ -15,8 +15,8 @@
     <p class="no-tags" v-if="!tagsArr.length">No tags</p>
 
     <ul class="tag-list" v-else-if="tagsArr.length">
-      <li class="tag-item" v-for="tag in tagsArr" :key="tag">
-        {{ tag }}
+      <li class="tag-item" v-for="tag in tagsArr" :key="tag.id">
+        {{ tag.content }}
       </li>
     </ul>
 
