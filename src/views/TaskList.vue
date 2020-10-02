@@ -1,41 +1,37 @@
 <template>
   <div>
-    <div>TaskList</div>
+    <Select
+      v-bind:options="filterOptions"
+      v-bind:value="filter"
+      v-on:on-change="changeFilterValue"
+    />
 
-    <ul class="task-list">
-      <li class="task-item" :key="task.id" v-for="task of allTasks">
-        <h1>{{ task.title }}</h1>
-        <p>{{ task.description }}</p>
-      </li>
-    </ul>
+    <List v-bind:list="allTasks" />
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
+import Select from '@/components/Select.vue';
+import List from '@/components/TaskList.vue';
+
+import { filterOptions } from '@/assets/constants';
 
 export default {
   name: 'TaskList',
-  components: {},
-  computed: mapGetters(['allTasks']),
+
+  components: {
+    Select,
+    List,
+  },
+
+  beforeCreate() {
+    this.filterOptions = filterOptions;
+  },
+
+  methods: {
+    ...mapMutations(['changeFilterValue']),
+  },
+  computed: mapGetters(['allTasks', 'filter']),
 };
 </script>
-
-<style scoped>
-.task-list {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.task-item {
-  width: 400px;
-  border: 1px solid black;
-  text-align: center;
-  margin-bottom: 10px;
-}
-</style>

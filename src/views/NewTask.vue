@@ -74,6 +74,7 @@ export default {
         return false;
       }
     },
+
     onSubmit() {
       if (this.formIsValid) {
         const newTask = {
@@ -81,7 +82,7 @@ export default {
           title: this.title,
           tags: this.tagsArr,
           description: this.description,
-          date: this.date,
+          date: new Date(this.date).getTime(), // to unix
           status: true,
         };
 
@@ -89,6 +90,7 @@ export default {
         this.resetForm();
       }
     },
+
     onValidate(formItem) {
       if (!this[formItem] || !this[formItem].length) {
         this.errors[formItem] = true;
@@ -96,6 +98,7 @@ export default {
         this.errors[formItem] = false;
       }
     },
+
     onTagSave(e) {
       if (e.code === 'Enter' && !!this.tags) {
         this.tagsArr.push({
@@ -105,6 +108,7 @@ export default {
         this.tags = '';
       }
     },
+
     resetForm() {
       this.title = '';
       this.tags = '';
