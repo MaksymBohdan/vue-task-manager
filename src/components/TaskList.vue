@@ -1,16 +1,18 @@
 <template>
   <ul class="task-list">
     <li class="task-item" :key="i.id" v-for="i of list">
-      <h3 class="title-style">
-        {{ i.title }}
-        {{ !i.status ? '&#9989;' : '&#9940;' }}
-      </h3>
-      <p class="cut-text">{{ i.description }}</p>
-      <ul class="tag-list">
-        <li class="tag-item" v-for="tag of i.tags" :key="tag.id">
-          {{ tag.content }}
-        </li>
-      </ul>
+      <router-link class="item-link" :to="'/task-item/' + i.id">
+        <h3 class="title-style">
+          {{ i.title }}
+          {{ !i.status ? '&#9989;' : '&#9940;' }}
+        </h3>
+        <p class="cut-text">{{ i.description }}</p>
+        <ul class="tag-list">
+          <li class="tag-item" v-for="tag of i.tags" :key="tag.id">
+            {{ tag.content }}
+          </li>
+        </ul>
+      </router-link>
     </li>
   </ul>
 </template>
@@ -23,6 +25,13 @@ export default {
 </script>
 
 <style scoped>
+.item-link {
+  display: block;
+  padding: 15px;
+  color: inherit;
+  text-decoration: inherit;
+}
+
 .task-list {
   display: flex;
   flex-direction: column;
@@ -38,7 +47,6 @@ export default {
   border: 1px solid black;
   text-align: center;
   margin-bottom: 10px;
-  padding: 15px;
 }
 
 .tag-list {
@@ -48,7 +56,6 @@ export default {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  width: 424px;
   box-sizing: border-box;
   margin-top: 5px;
 }

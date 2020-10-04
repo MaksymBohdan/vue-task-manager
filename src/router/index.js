@@ -11,12 +11,12 @@ const routes = [
     name: 'TaskList',
     component: TaskList,
   },
-  // {
-  //   path: '/task-list',
-  //   name: 'TaskList',
-  //   component: () =>
-  //     import(/* webpackChunkName: "task-list" */ '../views/TaskList.vue'),
-  // },
+  {
+    path: '/task-item/:id',
+    name: 'TaskItem',
+    component: () =>
+      import(/* webpackChunkName: "task-item" */ '../views/TaskItem.vue'),
+  },
   {
     path: '/new-task',
     name: 'NewTask',
