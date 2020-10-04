@@ -46,6 +46,8 @@ import InputDate from '@/components/InputDate.vue';
 import InputTags from '@/components/InputTags.vue';
 import InputContent from '@/components/InputContent.vue';
 
+import { preventSubmitFunction } from '@/utils';
+
 export default {
   name: 'NewTask',
   components: {
@@ -68,11 +70,7 @@ export default {
     ...mapMutations(['createTask']),
 
     preventSubmitOnKey(e) {
-      if (e.keyCode === 13) {
-        e.preventDefault();
-        e.stopPropagation();
-        return false;
-      }
+      preventSubmitFunction(e);
     },
 
     onSubmit() {
